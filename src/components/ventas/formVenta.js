@@ -7,24 +7,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
+import { URL_PRODUCCION } from "../../config";
 
 export default function FormVenta({ clientes, vehiculos }) {
   const [cliente, setCliente] = useState({});
   const [filteredCliente, setfilteredCliente] = useState(clientes);
   const [filteredVehiculo, setfilteredVehiculo] = useState(vehiculos);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-  const [listVehiculos, setListVehiculos] = useState([
-    {
-      Linea: 0,
-      Vehiculo: 0,
-      Precio: 0,
-      Cantidad: 0,
-      Subtotal: 0,
-      Iva: 0,
-      Descuento: 0,
-      Neto: 0,
-    },
-  ]);
+  const [listDetalle, setListDetalle] = useState([]);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -45,7 +35,7 @@ export default function FormVenta({ clientes, vehiculos }) {
       alert("Seleccione una fecha");
       return;
     }
-    if (listVehiculos.length === 0) {
+    if (listDetalle.length === 0) {
       alert("Seleccione un vehiculo");
       return;
     }
@@ -53,10 +43,23 @@ export default function FormVenta({ clientes, vehiculos }) {
       cliente: cliente.Codigo,
       fecha: date,
       observacion: "",
-      Detalle: listVehiculos,
+      detalle: listDetalle,
     };
 
     console.log(data);
+    fetch(`https://localhost:7238/Venta`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .catch((error) => console.log(error))
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        alert("Venta creada correctamente");
+      });
   };
 
   const handleFilterVehiculo = (filterValue) => {
@@ -67,7 +70,14 @@ export default function FormVenta({ clientes, vehiculos }) {
   };
 
   const handleAddVehiculo = (vehiculo) => {
-    setListVehiculos([...listVehiculos, vehiculo]);
+    vehiculo.Linea = listDetalle.length + 1;
+    vehiculo.Vehiculo = vehiculo.Codigo;
+    vehiculo.Cantidad = 1;
+    vehiculo.Subtotal = vehiculo.Precio;
+    vehiculo.Iva = vehiculo.Precio * 0.12;
+    vehiculo.Descuento = 0;
+    vehiculo.Neto = vehiculo.Precio * 1.12;
+    setListDetalle([...listDetalle, vehiculo]);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -80,9 +90,9 @@ export default function FormVenta({ clientes, vehiculos }) {
   };
 
   const eliminarVehiculo = (index) => () => {
-    const newList = [...listVehiculos];
+    const newList = [...listDetalle];
     newList.splice(index, 1);
-    setListVehiculos(newList);
+    setListDetalle(newList);
   };
 
   return (
@@ -349,8 +359,8 @@ export default function FormVenta({ clientes, vehiculos }) {
                     pattern="\d{1,2}/\d{1,2}/\d{4}"
                     min={new Date().toISOString().split("T")[0]}
                     className="form-control"
-                    placeholder="Last name"
-                    aria-label="Last name"
+                    placeholder="Fecha"
+                    aria-label="Fecha"
                   />
                 </div>
               </div>
@@ -383,16 +393,19 @@ export default function FormVenta({ clientes, vehiculos }) {
                       <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                           <TableRow>
-                            <TableCell>Numero</TableCell>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell align="right">Marca</TableCell>
+                            <TableCell>Linea</TableCell>
+                            <TableCell>Vehiculo</TableCell>
                             <TableCell align="right">Precio</TableCell>
-                            <TableCell align="right">Estado</TableCell>
-                            <TableCell align="right"></TableCell>
+                            <TableCell align="right">Cantidad</TableCell>
+                            <TableCell align="right">Subtotal</TableCell>
+                            <TableCell align="right">Iva</TableCell>
+                            <TableCell align="right">Descuento</TableCell>
+                            <TableCell align="right">Neto</TableCell>
+                            <TableCell></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {listVehiculos
+                          {listDetalle
                             ?.filter((vehiculo) => vehiculo.Estado === true)
                             .slice(
                               page * rowsPerPage,
@@ -400,9 +413,6 @@ export default function FormVenta({ clientes, vehiculos }) {
                             )
                             .map((row, index) => (
                               <TableRow
-                                onDoubleClick={() => {
-                                  setCliente(row);
-                                }}
                                 hover
                                 key={row.Codigo}
                                 sx={{
@@ -417,12 +427,35 @@ export default function FormVenta({ clientes, vehiculos }) {
                                 <TableCell component="th" scope="row">
                                   {row.Nombre}
                                 </TableCell>
-                                <TableCell align="right">{row.Marca}</TableCell>
                                 <TableCell align="right">
-                                  {row.Precio}
+                                  {row.Precio.toLocaleString("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                  })}
                                 </TableCell>
                                 <TableCell align="right">
-                                  {row.Estado ? "Activo" : "Inactivo"}
+                                  {row.Cantidad}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Subtotal.toLocaleString("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                  })}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Iva.toLocaleString("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                  })}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Descuento}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.Neto.toLocaleString("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                  })}
                                 </TableCell>
                                 <TableCell align="right">
                                   <button
@@ -440,7 +473,7 @@ export default function FormVenta({ clientes, vehiculos }) {
                     <TablePagination
                       rowsPerPageOptions={[5, 10, 25]}
                       component="div"
-                      count={listVehiculos.length}
+                      count={listDetalle.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}
