@@ -10,6 +10,8 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { NavLink } from "react-router-dom";
 import Tipography from "@mui/material/Typography";
+import SaveIcon from "@mui/icons-material/Save";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function CrearCliente() {
   //#region Variables
@@ -214,7 +216,12 @@ export default function CrearCliente() {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Button variant="contained" component={NavLink} to="/">
+          <Button
+            variant="text"
+            startIcon={<ArrowBackIcon />}
+            component={NavLink}
+            to="/"
+          >
             Volver
           </Button>
         </Grid>
@@ -335,8 +342,13 @@ export default function CrearCliente() {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <Button variant="contained" color="success" type="submit">
-                  Agregar
+                <Button
+                  variant="contained"
+                  startIcon={<SaveIcon />}
+                  color="success"
+                  type="submit"
+                >
+                  Grabar
                 </Button>
               </Grid>
             </Grid>

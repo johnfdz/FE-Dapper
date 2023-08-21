@@ -7,9 +7,11 @@ import { URL_PRODUCCION } from "../config";
 import Grid from "@mui/material/Grid";
 import { NavLink } from "react-router-dom";
 import * as XLSX from "xlsx/xlsx.mjs";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import Tipography from "@mui/material/Typography";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import SummarizeIcon from "@mui/icons-material/Summarize";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import { URL_DESARROLLO } from "../config";
 
 export default function MostrarVehiculo() {
   const [vehiculos, setVehiculos] = useState([]);
@@ -21,28 +23,33 @@ export default function MostrarVehiculo() {
     XLSX.writeFile(wb, filename);
   };
 
-  const exportToPDF = (data) => {
-    const doc = new jsPDF();
-    const tableColumn = ["Codigo", "Nombre", "Marca", "Precio", "Estado"];
-    const tableRows = [];
+  const generatePDF = async () => {
+    try {
+      // Realizar la solicitud POST a la API para generar el PDF
+      const response = await fetch(`${URL_DESARROLLO}/Vehiculo/GetPDF`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(vehiculos),
+      });
 
-    data.forEach((item) => {
-      const dataRow = [
-        item.Codigo,
-        item.Nombre,
-        item.Marca,
-        item.Precio,
-        item.Estado ? "Activo" : "Inactivo",
-      ];
-      tableRows.push(dataRow);
-    });
-
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-    });
-
-    doc.save("vehiculos.pdf");
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "repVehiculos.pdf";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error("Error al generar el PDF:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error al generar el PDF:", error);
+    }
   };
 
   useEffect(() => {
@@ -54,24 +61,40 @@ export default function MostrarVehiculo() {
   }, [vehiculos]);
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <Tipography variant="h4">Ingreso de Vehiculos</Tipography>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={4}>
         <Button
-          variant="contained"
+          variant="text"
+          startIcon={<SummarizeIcon />}
           onClick={() => exportToExcel(vehiculos, "vehiculos.xlsx")}
+          color="primary"
+          fullWidth
         >
           Excel
         </Button>
       </Grid>
-      <Grid item xs={2}>
-        <Button variant="contained" onClick={() => exportToPDF(vehiculos)}>
+      <Grid item xs={4}>
+        <Button
+          variant="text"
+          startIcon={<PictureAsPdfIcon />}
+          onClick={() => generatePDF()}
+          color="primary"
+          fullWidth
+        >
           PDF
         </Button>
       </Grid>
-      <Grid item xs={2}>
-        <Button variant="contained" component={NavLink} to="/crearVehiculo">
+      <Grid item xs={4}>
+        <Button
+          variant="text"
+          startIcon={<AddBoxIcon />}
+          component={NavLink}
+          to="/crearVehiculo"
+          color="primary"
+          fullWidth
+        >
           Agregar
         </Button>
       </Grid>

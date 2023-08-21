@@ -41,13 +41,13 @@ export default function FormVenta({ clientes, vehiculos }) {
     }
     const data = {
       cliente: cliente.Codigo,
-      fecha: date,
+      fechaVenta: date,
       observacion: "",
       detalle: listDetalle,
     };
 
     console.log(data);
-    fetch(`${URL_DESARROLLO}Venta`, {
+    fetch(`${URL_DESARROLLO}/Venta`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -349,18 +349,6 @@ export default function FormVenta({ clientes, vehiculos }) {
                   </button>
                 </div>
                 <div className="col">
-                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker"]}>
-                      <DatePicker
-                        value={date}
-                        onChange={(e) => {
-                          setDate(e.target.value);
-                          console.log(date);
-                        }}
-                        label="Basic date picker"
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider> */}
                   <input
                     value={date}
                     onChange={(e) => {

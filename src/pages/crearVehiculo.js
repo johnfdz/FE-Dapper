@@ -10,6 +10,8 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { NavLink } from "react-router-dom";
 import Tipography from "@mui/material/Typography";
+import SaveIcon from "@mui/icons-material/Save";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function CrearVehiculo() {
   //#region Variables
@@ -105,14 +107,19 @@ export default function CrearVehiculo() {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Button variant="contained" component={NavLink} to="/mostrarVehiculo">
+          <Button
+            variant="text"
+            startIcon={<ArrowBackIcon />}
+            component={NavLink}
+            to="/mostrarVehiculo"
+          >
             Volver
           </Button>
         </Grid>
         <Grid item xs={12}>
           <Box component={"form"} onSubmit={handleSubmit}>
             <Grid container spacing={2}>
-              <Grid item xs={12} spacing={2}>
+              <Grid item xs={12}>
                 <Tipography variant="h4">Ingreso de Vehiculos</Tipography>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -176,8 +183,13 @@ export default function CrearVehiculo() {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Button variant="contained" color="success" type="submit">
-                  Agregar
+                <Button
+                  variant="contained"
+                  startIcon={<SaveIcon />}
+                  color="success"
+                  type="submit"
+                >
+                  Grabar
                 </Button>
               </Grid>
             </Grid>
