@@ -5,23 +5,26 @@ import MostraClientes from "./pages/mostrarClientes";
 import CrearCliente from "./pages/crearCliente";
 import MostrarVehiculo from "./pages/mostrarVehiculos";
 import CrearVehiculo from "./pages/crearVehiculo";
-import Navbar from "./components/base/navbar";
+import Navbar from "./components/base/navbar/navbar";
 import Venta from "./pages/venta";
+import { Container } from "@mui/material";
 
 function App() {
   return (
-    <div className="App">
+    <>
       <Navbar />
       <br />
-      <Routes>
-        <Route path="/" element={<MostraClientes />} />
-        <Route path="/crearCliente" element={<CrearCliente />} />
-        <Route path="/mostrarVehiculo" element={<MostrarVehiculo />} />
-        <Route path="/crearVehiculo" element={<CrearVehiculo />} />
-        <Route path="/venta" element={<Venta />} />
-        <Route path="*" element={<h1>Not Found</h1>} />
-      </Routes>
-    </div>
+      <Container maxWidth="sx">
+        <Routes>
+          <Route path="/" element={<MostraClientes />} />
+          <Route path="/crearCliente" element={<CrearCliente />} />
+          <Route path="/mostrarVehiculo" element={<MostrarVehiculo />} />
+          <Route path="/crearVehiculo" element={<CrearVehiculo />} />
+          <Route path="/venta" element={<Venta />} />
+          <Route path="*" element={<h1>Not Found</h1>} />
+        </Routes>
+      </Container>
+    </>
   );
 }
 

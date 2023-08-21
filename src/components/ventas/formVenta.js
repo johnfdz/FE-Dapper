@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
-import { URL_PRODUCCION } from "../../config";
+import { URL_DESARROLLO } from "../../config";
 
 export default function FormVenta({ clientes, vehiculos }) {
   const [cliente, setCliente] = useState({});
@@ -47,7 +47,7 @@ export default function FormVenta({ clientes, vehiculos }) {
     };
 
     console.log(data);
-    fetch(`https://localhost:7238/Venta`, {
+    fetch(`${URL_DESARROLLO}Venta`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -349,6 +349,18 @@ export default function FormVenta({ clientes, vehiculos }) {
                   </button>
                 </div>
                 <div className="col">
+                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        value={date}
+                        onChange={(e) => {
+                          setDate(e.target.value);
+                          console.log(date);
+                        }}
+                        label="Basic date picker"
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider> */}
                   <input
                     value={date}
                     onChange={(e) => {

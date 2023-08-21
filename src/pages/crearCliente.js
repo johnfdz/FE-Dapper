@@ -7,8 +7,12 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { URL_PRODUCCION } from "../config";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import { NavLink } from "react-router-dom";
+import Tipography from "@mui/material/Typography";
 
 export default function CrearCliente() {
+  //#region Variables
   const [ruc, setRuc] = useState("");
   const [razonSocial, setRazonSocial] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -47,6 +51,9 @@ export default function CrearCliente() {
     helperText: "",
   });
 
+  //#endregion
+
+  //#region Validaciones
   const validarRuc = (data) => {
     if (data.length !== 13) {
       return true;
@@ -201,16 +208,24 @@ export default function CrearCliente() {
     window.location.replace("/");
   };
 
+  //#endregion
+
   return (
-    <div>
-      <h1>Crear Cliente</h1>
-      <div className="d-flex justify-content-center">
-        <Box component={"form"} onSubmit={handleSubmit}>
-          <div className="row gap-3">
-            <div className="row text-center">
-              <div>
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Button variant="contained" component={NavLink} to="/">
+            Volver
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Tipography variant="h4">Ingreso de Clientes</Tipography>
+        </Grid>
+        <Grid item xs={12}>
+          <Box component={"form"} onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
                 <TextField
-                  className="w-50"
                   type="number"
                   inputProps={{ inputMode: "numeric", pattern: "[0-9](13)" }}
                   value={ruc}
@@ -220,14 +235,13 @@ export default function CrearCliente() {
                   id="ruc"
                   label="Ruc"
                   variant="outlined"
+                  fullWidth
+                  size="small"
                   required
                 />
-              </div>
-            </div>
-            <div className="row text-center">
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <TextField
-                  className="w-50"
                   value={razonSocial}
                   onChange={(e) => setRazonSocial(e.target.value)}
                   error={errorRazonSocial.error}
@@ -235,14 +249,13 @@ export default function CrearCliente() {
                   id="outlined-basic"
                   label="Razon Social"
                   variant="outlined"
+                  size="small"
+                  fullWidth
                   required
                 />
-              </div>
-            </div>
-            <div className="row text-center">
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <TextField
-                  className="w-50"
                   type="text"
                   inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                   value={telefono}
@@ -252,14 +265,13 @@ export default function CrearCliente() {
                   id="outlined-basic"
                   label="Telefono"
                   variant="outlined"
+                  size="small"
+                  fullWidth
                   required
                 />
-              </div>
-            </div>
-            <div className="row text-center">
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <TextField
-                  className="w-50"
                   type="number"
                   inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                   value={celular}
@@ -269,14 +281,13 @@ export default function CrearCliente() {
                   id="outlined-basic"
                   label="Celular"
                   variant="outlined"
+                  size="small"
+                  fullWidth
                   required
                 />
-              </div>
-            </div>
-            <div className="row text-center">
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <TextField
-                  className="w-50"
                   type="email"
                   value={correo}
                   onChange={(e) => setCorreo(e.target.value)}
@@ -285,14 +296,13 @@ export default function CrearCliente() {
                   id="outlined-basic"
                   label="Correo"
                   variant="outlined"
+                  size="small"
+                  fullWidth
                   required
                 />
-              </div>
-            </div>
-            <div className="row text-center">
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <TextField
-                  className="w-50"
                   type="text"
                   value={direccion}
                   onChange={(e) => setDireccion(e.target.value)}
@@ -301,14 +311,13 @@ export default function CrearCliente() {
                   id="outlined-basic"
                   label="Direccion"
                   variant="outlined"
+                  size="small"
+                  fullWidth
                   required
                 />
-              </div>
-            </div>
-
-            <div className="row">
-              <div>
-                <FormControl className="w-50" required>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth size="small" required>
                   <InputLabel id="demo-simple-select-label">Estado</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -324,19 +333,16 @@ export default function CrearCliente() {
                     <MenuItem value={false}>Inactivo</MenuItem>
                   </Select>
                 </FormControl>
-              </div>
-            </div>
-
-            <div className="row text-center">
-              <div>
+              </Grid>
+              <Grid item xs={12}>
                 <Button variant="contained" color="success" type="submit">
                   Agregar
                 </Button>
-              </div>
-            </div>
-          </div>
-        </Box>
-      </div>
-    </div>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+      </Grid>
+    </>
   );
 }

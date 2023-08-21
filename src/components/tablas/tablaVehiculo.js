@@ -18,6 +18,7 @@ import Modal from "@mui/material/Modal";
 // import EditVehiculo from "../modals/editVehiculo";
 import { URL_PRODUCCION } from "../../config";
 import TablePagination from "@mui/material/TablePagination";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function TablaVehiuclo({ vehiculos }) {
   const [vehiculo, setVehiculo] = useState({});
@@ -232,9 +233,8 @@ export default function TablaVehiuclo({ vehiculos }) {
                       <Button
                         onClick={() => eliminarVehiculo(row.Codigo)}
                         color="error"
-                      >
-                        Eliminar
-                      </Button>
+                        startIcon={<DeleteIcon />}
+                      ></Button>
                     </TableCell>
                   </TableRow>
                 ))}

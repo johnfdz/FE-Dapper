@@ -6,8 +6,13 @@ import MenuItem from "@mui/material/MenuItem";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { URL_PRODUCCION } from "../config";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import { NavLink } from "react-router-dom";
+import Tipography from "@mui/material/Typography";
 
 export default function CrearVehiculo() {
+  //#region Variables
   const [nombre, setNombre] = useState("");
   const [marca, setMarca] = useState("");
   const [precio, setPrecio] = useState("");
@@ -16,7 +21,9 @@ export default function CrearVehiculo() {
     error: false,
     helperText: "",
   });
+  //#endregion
 
+  //#region Validaciones
   const validarNombre = (data) => {
     if (data.length < 5) {
       return true;
@@ -37,6 +44,7 @@ export default function CrearVehiculo() {
     }
     return false;
   };
+  //#endregion
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -83,7 +91,6 @@ export default function CrearVehiculo() {
         console.log(data);
         alert("Vehiculo creado correctamente");
       })
-
       .catch((error) => console.log(error));
 
     setNombre("");
@@ -95,96 +102,88 @@ export default function CrearVehiculo() {
   };
 
   return (
-    <div>
-      <h1>Crear Vehiculo</h1>
-      <div>
-        <div className="d-flex justify-content-center">
-          <form onSubmit={handleSubmit}>
-            <div className="row gap-3">
-              <div className="row text-center">
-                <div>
-                  <TextField
-                    className="w-50"
-                    value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                    id="outlined-basic"
-                    label="Nombre"
-                    variant="outlined"
-                    error={error.error}
-                    helperText={error.helperText}
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Button variant="contained" component={NavLink} to="/mostrarVehiculo">
+            Volver
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Box component={"form"} onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} spacing={2}>
+                <Tipography variant="h4">Ingreso de Vehiculos</Tipography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  id="outlined-basic"
+                  label="Nombre"
+                  variant="outlined"
+                  error={error.error}
+                  helperText={error.helperText}
+                  size="small"
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={marca}
+                  onChange={(e) => setMarca(e.target.value)}
+                  id="outlined-basic"
+                  label="Marca"
+                  variant="outlined"
+                  error={error.error}
+                  helperText={error.helperText}
+                  size="small"
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={precio}
+                  onChange={(e) => setPrecio(e.target.value)}
+                  id="outlined-basic"
+                  label="Precio"
+                  variant="outlined"
+                  error={error.error}
+                  helperText={error.helperText}
+                  size="small"
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth size="small" required>
+                  <InputLabel id="demo-simple-select-label">Estado</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={estado}
+                    label="Age"
+                    onChange={(e) => setEstado(e.target.value)}
                     required
-                  />
-                </div>
-              </div>
-              <div className="row text-center">
-                <div>
-                  <TextField
-                    className="w-50"
-                    value={marca}
-                    onChange={(e) => setMarca(e.target.value)}
-                    id="outlined-basic"
-                    label="Marca"
-                    variant="outlined"
-                    error={error.error}
-                    helperText={error.helperText}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="row text-center">
-                <div>
-                  <TextField
-                    className="w-50"
-                    value={precio}
-                    onChange={(e) => setPrecio(e.target.value)}
-                    id="outlined-basic"
-                    label="Precio"
-                    variant="outlined"
-                    error={error.error}
-                    helperText={error.helperText}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="row">
-                <div>
-                  <FormControl className="w-50" required>
-                    <InputLabel id="demo-simple-select-label">
-                      Estado
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={estado}
-                      label="Age"
-                      onChange={(e) => setEstado(e.target.value)}
-                      required
-                    >
-                      <MenuItem selected value={true}>
-                        Activo
-                      </MenuItem>
-                      <MenuItem value={false}>Inactivo</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-              </div>
-
-              <div className="row text-center">
-                <div>
-                  <Button
-                    className="w-25"
-                    variant="contained"
-                    color="success"
-                    type="submit"
                   >
-                    Agregar
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+                    <MenuItem selected value={true}>
+                      Activo
+                    </MenuItem>
+                    <MenuItem value={false}>Inactivo</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Button variant="contained" color="success" type="submit">
+                  Agregar
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+      </Grid>
+    </>
   );
 }
