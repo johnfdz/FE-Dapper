@@ -214,7 +214,12 @@ export default function TablaVehiuclo({ vehiculos }) {
                       {row.Nombre}
                     </TableCell>
                     <TableCell align="right">{row.Marca}</TableCell>
-                    <TableCell align="right">{row.Precio}</TableCell>
+                    <TableCell align="right">
+                      {row.Precio.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                      })}
+                    </TableCell>
                     <TableCell align="right">
                       {row.Estado ? "Activo" : "Inactivo"}
                     </TableCell>
