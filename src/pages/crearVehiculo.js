@@ -5,7 +5,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import { URL_PRODUCCION } from "../config";
+import { URL_DESARROLLO } from "../config";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { NavLink } from "react-router-dom";
@@ -75,7 +75,7 @@ export default function CrearVehiculo() {
       return;
     }
 
-    fetch(`${URL_PRODUCCION}/Vehiculo`, {
+    fetch(`${URL_DESARROLLO}/Vehiculo`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

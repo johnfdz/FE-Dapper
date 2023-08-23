@@ -1,11 +1,10 @@
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import TablaCliente from "../components/tablas/tablaCliente";
-import { URL_DESARROLLO, URL_PRODUCCION } from "../config";
+import { URL_DESARROLLO } from "../config";
 import Grid from "@mui/material/Grid";
 import { NavLink } from "react-router-dom";
 import Tipography from "@mui/material/Typography";
-import * as XLSX from "xlsx/xlsx.mjs";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -13,23 +12,25 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 export default function MostraClientes() {
   const [clientes, setClientes] = useState([]);
 
-  const exportToExcel = (data, filename) => {
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
-    XLSX.writeFile(wb, filename);
+  const generateExcel = async () => {
+    const response = await fetch(`${URL_DESARROLLO}/Cliente/GetExcel`);
+    if (response.ok) {
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = "reporte_clientes.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
   };
 
   const generatePDF = async () => {
     try {
       // Realizar la solicitud POST a la API para generar el PDF
-      const response = await fetch(`${URL_DESARROLLO}/Cliente/GetPDF`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(clientes),
-      });
+      const response = await fetch(`${URL_DESARROLLO}/Cliente/GetPDF`);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -50,12 +51,12 @@ export default function MostraClientes() {
   };
 
   useEffect(() => {
-    fetch(`${URL_PRODUCCION}/Cliente`)
+    fetch(`${URL_DESARROLLO}/Cliente`)
       .then((res) => res.json())
       .then((data) => {
         setClientes(data);
       });
-  }, [clientes]);
+  }, []);
 
   return (
     <Grid container spacing={2}>
@@ -66,7 +67,7 @@ export default function MostraClientes() {
         <Button
           variant="text"
           startIcon={<SummarizeIcon />}
-          onClick={() => exportToExcel(clientes, "clientes.xlsx")}
+          onClick={() => generateExcel()}
           color="primary"
           fullWidth
         >

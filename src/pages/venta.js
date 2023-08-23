@@ -1,18 +1,18 @@
 import FormVenta from "../components/ventas/formVenta";
 import { useEffect, useState } from "react";
-import { URL_PRODUCCION } from "../config";
+import { URL_DESARROLLO } from "../config";
 
 export default function Venta() {
   const [clientes, setClientes] = useState([]);
   const [vehiculos, setVehiculos] = useState([]);
 
   useEffect(() => {
-    fetch(`${URL_PRODUCCION}/Cliente`)
+    fetch(`${URL_DESARROLLO}/Cliente`)
       .then((res) => res.json())
       .then((data) => {
         setClientes(data);
       });
-    fetch(`${URL_PRODUCCION}/Vehiculo`)
+    fetch(`${URL_DESARROLLO}/Vehiculo`)
       .then((res) => res.json())
       .then((data) => {
         setVehiculos(data);
@@ -20,7 +20,6 @@ export default function Venta() {
   }, [clientes, vehiculos]);
   return (
     <div>
-      <h1>Venta</h1>
       <div>
         <FormVenta clientes={clientes} vehiculos={vehiculos} />
       </div>

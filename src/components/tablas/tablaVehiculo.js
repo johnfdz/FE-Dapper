@@ -13,12 +13,12 @@ import { useState } from "react";
 import { Box, Collapse, IconButton } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 // import EditVehiculo from "../modals/editVehiculo";
 import { URL_PRODUCCION } from "../../config";
 import TablePagination from "@mui/material/TablePagination";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import EditVehiculo from "../modals/editVehiculo";
 
 export default function TablaVehiuclo({ vehiculos }) {
   const [vehiculo, setVehiculo] = useState({});
@@ -78,7 +78,6 @@ export default function TablaVehiuclo({ vehiculos }) {
 
   return (
     <>
-      {/* {modal && <EditVehiculo />} */}
       <div className="col-12">
         <Box sx={{ width: "100%" }}>
           <Collapse in={open}>
@@ -102,87 +101,13 @@ export default function TablaVehiuclo({ vehiculos }) {
           </Collapse>
         </Box>
       </div>
-      <Modal
-        open={modal}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Modificar vehiculo
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <form onSubmit={modSubmit}>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Nombre
-                </label>
-                <input
-                  value={vehiculo.Nombre}
-                  onChange={(e) => {
-                    setVehiculo({ ...vehiculo, Nombre: e.target.value });
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Marca
-                </label>
-                <input
-                  value={vehiculo.Marca}
-                  onChange={(e) => {
-                    setVehiculo({ ...vehiculo, Marca: e.target.value });
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Precio
-                </label>
-                <input
-                  value={vehiculo.Precio}
-                  onChange={(e) => {
-                    setVehiculo({ ...vehiculo, Precio: e.target.value });
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Estado
-                </label>
-                <select
-                  value={vehiculo.Estado}
-                  onChange={(e) => {
-                    setVehiculo({ ...vehiculo, Estado: e.target.value });
-                  }}
-                  className="form-select"
-                  aria-label="Default select example"
-                >
-                  <option selected>Seleccione</option>
-                  <option value={true}>Activo</option>
-                  <option value={false}>Inactivo</option>
-                </select>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Guardar
-              </button>
-            </form>
-          </Typography>
-        </Box>
-      </Modal>
+      <EditVehiculo
+        handleClose={handleClose}
+        modSubmit={modSubmit}
+        setVehiculo={setVehiculo}
+        vehiculo={vehiculo}
+        modal={modal}
+      />
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -228,11 +153,9 @@ export default function TablaVehiuclo({ vehiculos }) {
                         onClick={() => {
                           modificarVehiculo(row.Codigo);
                         }}
-                        variant="outlined"
                         color="secondary"
-                      >
-                        Modificar
-                      </Button>
+                        startIcon={<EditIcon />}
+                      ></Button>
                     </TableCell>
                     <TableCell align="right">
                       <Button
@@ -259,15 +182,3 @@ export default function TablaVehiuclo({ vehiculos }) {
     </>
   );
 }
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};

@@ -5,7 +5,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { URL_PRODUCCION } from "../config";
+import { URL_DESARROLLO } from "../config";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { NavLink } from "react-router-dom";
@@ -176,7 +176,7 @@ export default function CrearCliente() {
       });
     }
 
-    fetch(`${URL_PRODUCCION}/Cliente`, {
+    fetch(`${URL_DESARROLLO}/Cliente`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

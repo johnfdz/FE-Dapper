@@ -3,36 +3,37 @@ import Button from "@mui/material/Button";
 import TablaVehiuclo from "../components/tablas/tablaVehiculo";
 import { useState } from "react";
 import { useEffect } from "react";
-import { URL_PRODUCCION } from "../config";
+import { URL_DESARROLLO } from "../config";
 import Grid from "@mui/material/Grid";
 import { NavLink } from "react-router-dom";
-import * as XLSX from "xlsx/xlsx.mjs";
 import Tipography from "@mui/material/Typography";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import { URL_DESARROLLO } from "../config";
+// import { URL_DESARROLLO } from "../config";
 
 export default function MostrarVehiculo() {
   const [vehiculos, setVehiculos] = useState([]);
 
-  const exportToExcel = (data, filename) => {
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
-    XLSX.writeFile(wb, filename);
+  const generateExcel = async () => {
+    const response = await fetch(`${URL_DESARROLLO}/Vehiculo/GetExcel`);
+    if (response.ok) {
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = "reporte_vehiculos.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
   };
 
   const generatePDF = async () => {
     try {
       // Realizar la solicitud POST a la API para generar el PDF
-      const response = await fetch(`${URL_DESARROLLO}/Vehiculo/GetPDF`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(vehiculos),
-      });
+      const response = await fetch(`${URL_DESARROLLO}/Vehiculo/GetPDF`);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -53,12 +54,13 @@ export default function MostrarVehiculo() {
   };
 
   useEffect(() => {
-    fetch(`${URL_PRODUCCION}/Vehiculo`)
+    fetch(`${URL_DESARROLLO}/Vehiculo`)
       .then((res) => res.json())
       .then((data) => {
         setVehiculos(data);
       });
   }, [vehiculos]);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -68,7 +70,7 @@ export default function MostrarVehiculo() {
         <Button
           variant="text"
           startIcon={<SummarizeIcon />}
-          onClick={() => exportToExcel(vehiculos, "vehiculos.xlsx")}
+          onClick={() => generateExcel()}
           color="primary"
           fullWidth
         >

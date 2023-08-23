@@ -1,7 +1,5 @@
 import { Alert, Box, Collapse, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -14,6 +12,8 @@ import { useState } from "react";
 import { URL_PRODUCCION } from "../../config";
 import TablePagination from "@mui/material/TablePagination";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import EditCliente from "../modals/editCliente";
 
 export default function TablaCliente({ clientes }) {
   const [cliente, setCliente] = useState({});
@@ -94,132 +94,13 @@ export default function TablaCliente({ clientes }) {
           </Alert>
         </Collapse>
       </Box>
-      <Modal
-        open={modal}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Modificar cliente
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <form onSubmit={modSubmit}>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Ruc
-                </label>
-                <input
-                  value={cliente.Ruc}
-                  onChange={(e) => {
-                    setCliente({ ...cliente, Ruc: e.target.value });
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Razon Social
-                </label>
-                <input
-                  value={cliente.RazonSocial}
-                  onChange={(e) => {
-                    setCliente({ ...cliente, RazonSocial: e.target.value });
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Telefono
-                </label>
-                <input
-                  value={cliente.Telefono}
-                  onChange={(e) => {
-                    setCliente({ ...cliente, Telefono: e.target.value });
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Celular
-                </label>
-                <input
-                  value={cliente.Celular}
-                  onChange={(e) => {
-                    setCliente({ ...cliente, Celular: e.target.value });
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Correo
-                </label>
-                <input
-                  value={cliente.Correo}
-                  onChange={(e) => {
-                    setCliente({ ...cliente, Correo: e.target.value });
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Direccion
-                </label>
-                <input
-                  value={cliente.Direccion}
-                  onChange={(e) => {
-                    setCliente({ ...cliente, Direccion: e.target.value });
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
-              </div>
-              <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
-                  Estado
-                </label>
-                <select
-                  value={cliente.Estado}
-                  onChange={(e) => {
-                    setCliente({ ...cliente, Estado: e.target.value });
-                  }}
-                  className="form-select"
-                  aria-label="Default select example"
-                >
-                  <option selected>Seleccione</option>
-                  <option value={true}>Activo</option>
-                  <option value={false}>Inactivo</option>
-                </select>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Guardar
-              </button>
-            </form>
-          </Typography>
-        </Box>
-      </Modal>
+      <EditCliente
+        modal={modal}
+        handleClose={handleClose}
+        cliente={cliente}
+        setCliente={setCliente}
+        modSubmit={modSubmit}
+      />
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -267,11 +148,9 @@ export default function TablaCliente({ clientes }) {
                     <TableCell align="right">
                       <Button
                         onClick={() => modificarCliente(row.Codigo)}
-                        variant="outlined"
                         color="secondary"
-                      >
-                        Modificar
-                      </Button>
+                        startIcon={<EditIcon />}
+                      ></Button>
                     </TableCell>
                     <TableCell align="right">
                       <Button
@@ -288,7 +167,7 @@ export default function TablaCliente({ clientes }) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={clientes.length}
+          count={clientes?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -298,15 +177,3 @@ export default function TablaCliente({ clientes }) {
     </>
   );
 }
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
