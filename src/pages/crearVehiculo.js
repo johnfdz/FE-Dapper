@@ -42,7 +42,6 @@ export default function CrearVehiculo() {
 
   const handleClose = () => {
     setOpen(false);
-    window.location.replace("/mostrarVehiculo");
   };
   //#endregion
 
@@ -123,7 +122,11 @@ export default function CrearVehiculo() {
 
   return (
     <>
-      <Success open={open} handleClose={handleClose} />
+      <Success
+        open={open}
+        handleClose={handleClose}
+        ruta={"/mostrarVehiculo"}
+      />
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Button

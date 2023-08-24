@@ -8,13 +8,13 @@ import {
   DialogTitle,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { NavLink } from "react-router-dom";
 
-export default function Success({ open, handleClose }) {
+export default function Success({ open, handleClose, ruta }) {
   return (
     <>
       <Dialog
         open={open}
-        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -31,7 +31,12 @@ export default function Success({ open, handleClose }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} autoFocus>
+          <Button
+            onClick={handleClose}
+            component={NavLink}
+            to={ruta ? ruta : ""}
+            autoFocus
+          >
             Aceptar
           </Button>
         </DialogActions>

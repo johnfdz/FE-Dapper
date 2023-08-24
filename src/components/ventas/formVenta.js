@@ -122,7 +122,14 @@ export default function FormVenta() {
   };
 
   const clear = () => {
-    window.location.reload();
+    setCliente({});
+    setDate(new Date().toISOString().split("T")[0]);
+    setListDetalle([]);
+    setSubtotal(0);
+    setIva(0);
+    setDescuento(0);
+    setNeto(0);
+    setObservacion("");
   };
 
   const handleFilterVehiculo = (filterValue) => {
@@ -224,7 +231,7 @@ export default function FormVenta() {
                 Ruc o cedula
               </InputLabel>
               <OutlinedInput
-                value={cliente.Ruc}
+                value={cliente.Ruc ? cliente.Ruc : ""}
                 defaultValue={" "}
                 size="small"
                 inputProps={{
@@ -250,7 +257,7 @@ export default function FormVenta() {
               id="outlined-basic"
               label="Nombre"
               variant="outlined"
-              value={cliente.RazonSocial}
+              value={cliente.RazonSocial ? cliente.RazonSocial : ""}
               defaultValue={" "}
               size="small"
               InputProps={{
