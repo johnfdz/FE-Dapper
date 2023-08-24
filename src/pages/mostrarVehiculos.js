@@ -59,7 +59,7 @@ export default function MostrarVehiculo() {
       .then((data) => {
         setVehiculos(data);
       });
-  }, [vehiculos]);
+  }, []);
 
   return (
     <Grid container spacing={2}>

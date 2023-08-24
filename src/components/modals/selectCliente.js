@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { Grid, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { Collapse, IconButton } from "@mui/material";
-import Alert from "@mui/material/Alert";
-import CloseIcon from "@mui/icons-material/Close";
 import TablePagination from "@mui/material/TablePagination";
 import {
   Table,
@@ -23,8 +20,6 @@ export default function SeleccionarCliente({
   filteredCliente,
   setCliente,
 }) {
-  const [openAlert, setOpenAlert] = useState(false);
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -39,10 +34,7 @@ export default function SeleccionarCliente({
 
   const handleAddItem = (nuevoItem) => {
     setCliente(nuevoItem);
-    setOpenAlert(true);
-    setTimeout(() => {
-      setOpenAlert(false);
-    }, 1000);
+    handleClose();
   };
   return (
     <>
@@ -54,36 +46,14 @@ export default function SeleccionarCliente({
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Vehiculo
+            Cliente
           </Typography>
           <Grid container spacing={2}>
-            <Grid item md={12}>
-              <Collapse in={openAlert}>
-                <Alert
-                  action={
-                    <IconButton
-                      aria-label="close"
-                      color="inherit"
-                      size="small"
-                      onClick={() => {
-                        setOpenAlert(false);
-                      }}
-                    >
-                      <CloseIcon fontSize="inherit" />
-                    </IconButton>
-                  }
-                  sx={{ mb: 2 }}
-                >
-                  Se ha agregado el cliente con exito!
-                </Alert>
-              </Collapse>
-            </Grid>
-
             <Grid item sm={12}>
               <TextField
                 onChange={(e) => handleFilterCliente(e.target.value)}
                 pattern="[0-9]"
-                type="text"
+                type="number"
                 className="form-control"
                 placeholder="Ruc"
                 fullWidth
@@ -95,13 +65,27 @@ export default function SeleccionarCliente({
                   <Table sx={{ minWidth: 350 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell>Ruc</TableCell>
-                        <TableCell align="right">Razon Social</TableCell>
-                        <TableCell align="right">Telelfono</TableCell>
-                        <TableCell align="right">Celular</TableCell>
-                        <TableCell align="right">Correo</TableCell>
-                        <TableCell align="right">Direccion</TableCell>
-                        <TableCell align="right">Estado</TableCell>
+                        <TableCell>
+                          <strong>Ruc</strong>
+                        </TableCell>
+                        <TableCell align="right">
+                          <strong>Razon Social</strong>
+                        </TableCell>
+                        <TableCell align="right">
+                          <strong>Telefono</strong>
+                        </TableCell>
+                        <TableCell align="right">
+                          <strong>Celular</strong>
+                        </TableCell>
+                        <TableCell align="right">
+                          <strong>Correo</strong>
+                        </TableCell>
+                        <TableCell align="right">
+                          <strong>Direccion</strong>
+                        </TableCell>
+                        <TableCell align="right">
+                          <strong>Estado</strong>
+                        </TableCell>
                         <TableCell align="right"></TableCell>
                         <TableCell align="right"></TableCell>
                       </TableRow>

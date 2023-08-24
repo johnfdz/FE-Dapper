@@ -3,7 +3,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { TextField } from "@mui/material";
+import { Container, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { URL_DESARROLLO } from "../config";
 import Box from "@mui/material/Box";
@@ -12,6 +12,7 @@ import { NavLink } from "react-router-dom";
 import Tipography from "@mui/material/Typography";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Success from "../components/dialogs/dialogSuccess";
 
 export default function CrearVehiculo() {
   //#region Variables
@@ -19,29 +20,49 @@ export default function CrearVehiculo() {
   const [marca, setMarca] = useState("");
   const [precio, setPrecio] = useState("");
   const [estado, setEstado] = useState(true);
-  const [error, setError] = useState({
+
+  const [nombreError, setNombreError] = useState({
     error: false,
     helperText: "",
   });
+  const [marcaError, setMarcaError] = useState({
+    error: false,
+    helperText: "",
+  });
+  const [precioError, setPrecioError] = useState({
+    error: false,
+    helperText: "",
+  });
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    window.location.replace("/mostrarVehiculo");
+  };
   //#endregion
 
   //#region Validaciones
   const validarNombre = (data) => {
-    if (data.length < 5) {
+    if (data.length < 1) {
       return true;
     }
     return false;
   };
 
   const validarMarca = (data) => {
-    if (data.length < 5) {
+    if (data.length < 1) {
       return true;
     }
     return false;
   };
 
   const validarPrecio = (data) => {
-    if (data.length < 1) {
+    if (data < 1) {
       return true;
     }
     return false;
@@ -52,7 +73,7 @@ export default function CrearVehiculo() {
     event.preventDefault();
 
     if (validarNombre(nombre)) {
-      setError({
+      setNombreError({
         error: true,
         helperText: "Nombre invalido",
       });
@@ -60,7 +81,7 @@ export default function CrearVehiculo() {
     }
 
     if (validarMarca(marca)) {
-      setError({
+      setMarcaError({
         error: true,
         helperText: "Marca invalida",
       });
@@ -68,7 +89,7 @@ export default function CrearVehiculo() {
     }
 
     if (validarPrecio(precio)) {
-      setError({
+      setPrecioError({
         error: true,
         helperText: "Precio invalido",
       });
@@ -82,16 +103,15 @@ export default function CrearVehiculo() {
       },
       body: JSON.stringify({
         codigo: 0,
-        nombre: nombre,
-        marca: marca,
-        precio: precio,
+        nombre: nombre.trim(),
+        marca: marca.trim(),
+        precio: precio.trim(),
         estado: estado,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        alert("Vehiculo creado correctamente");
+        handleClickOpen();
       })
       .catch((error) => console.log(error));
 
@@ -99,12 +119,11 @@ export default function CrearVehiculo() {
     setMarca("");
     setPrecio("");
     setEstado(true);
-
-    window.location.replace("/mostrarVehiculos");
   };
 
   return (
     <>
+      <Success open={open} handleClose={handleClose} />
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Button
@@ -117,84 +136,92 @@ export default function CrearVehiculo() {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Box component={"form"} onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Tipography variant="h4">Ingreso de Vehiculos</Tipography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
-                  id="outlined-basic"
-                  label="Nombre"
-                  variant="outlined"
-                  error={error.error}
-                  helperText={error.helperText}
-                  size="small"
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  value={marca}
-                  onChange={(e) => setMarca(e.target.value)}
-                  id="outlined-basic"
-                  label="Marca"
-                  variant="outlined"
-                  error={error.error}
-                  helperText={error.helperText}
-                  size="small"
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  value={precio}
-                  onChange={(e) => setPrecio(e.target.value)}
-                  id="outlined-basic"
-                  label="Precio"
-                  variant="outlined"
-                  error={error.error}
-                  helperText={error.helperText}
-                  size="small"
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth size="small" required>
-                  <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={estado}
-                    label="Age"
-                    onChange={(e) => setEstado(e.target.value)}
-                    required
-                  >
-                    <MenuItem selected value={true}>
-                      Activo
-                    </MenuItem>
-                    <MenuItem value={false}>Inactivo</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Button
-                  variant="contained"
-                  startIcon={<SaveIcon />}
-                  color="success"
-                  type="submit"
-                >
-                  Grabar
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
+          <Tipography variant="h4">Ingreso de Vehiculos</Tipography>
         </Grid>
+        <Container maxWidth="sm">
+          <Grid item xs={12}>
+            <Box component={"form"} onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={8} sm={6}>
+                  <TextField
+                    value={nombre}
+                    onChange={(e) => setNombre(e.target.value.toUpperCase())}
+                    id="outlined-basic"
+                    label="Nombre"
+                    variant="outlined"
+                    error={nombreError.error}
+                    helperText={nombreError.helperText}
+                    size="small"
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item xs={8} sm={6}>
+                  <TextField
+                    value={marca}
+                    onChange={(e) => setMarca(e.target.value.toUpperCase())}
+                    id="outlined-basic"
+                    label="Marca"
+                    variant="outlined"
+                    error={marcaError.error}
+                    helperText={marcaError.helperText}
+                    size="small"
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item xs={8} sm={6}>
+                  <TextField
+                    value={precio.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                    onChange={(e) => setPrecio(e.target.value)}
+                    type="number"
+                    id="outlined-basic"
+                    label="Precio"
+                    variant="outlined"
+                    error={precioError.error}
+                    helperText={precioError.helperText}
+                    size="small"
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item xs={8} sm={6}>
+                  <FormControl fullWidth size="small" required>
+                    <InputLabel id="demo-simple-select-label">
+                      Estado
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={estado}
+                      label="Age"
+                      onChange={(e) => setEstado(e.target.value)}
+                      required
+                    >
+                      <MenuItem selected value={true}>
+                        Activo
+                      </MenuItem>
+                      <MenuItem value={false}>Inactivo</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Button
+                    variant="contained"
+                    startIcon={<SaveIcon />}
+                    color="success"
+                    type="submit"
+                  >
+                    Grabar
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </Grid>
+        </Container>
       </Grid>
     </>
   );

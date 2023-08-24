@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { URL_DESARROLLO } from "../../config";
 import TablaVehiculo from "../modals/selectVehiculo";
 import TablaVenta from "../tablas/tablaVenta";
@@ -8,11 +8,14 @@ import CheckIcon from "@mui/icons-material/Check";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Container, Grid, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import Success from "../dialogs/dialogSuccess";
+import { FormControl, InputLabel, OutlinedInput } from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
 
-export default function FormVenta({ clientes, vehiculos }) {
+export default function FormVenta() {
   const [cliente, setCliente] = useState({});
-  const [filteredCliente, setfilteredCliente] = useState(clientes);
-  const [filteredVehiculo, setfilteredVehiculo] = useState(vehiculos);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [listDetalle, setListDetalle] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
@@ -28,12 +31,43 @@ export default function FormVenta({ clientes, vehiculos }) {
   const handleOpenCliente = () => setOpenSelectCliente(true);
   const handleCloseCliente = () => setOpenSelectCliente(false);
 
+  const [clientes, setClientes] = useState([]);
+  const [vehiculos, setVehiculos] = useState([]);
+  const [filteredCliente, setfilteredCliente] = useState([]);
+  const [filteredVehiculo, setfilteredVehiculo] = useState([]);
+
+  const [success, setSuccess] = useState(false);
+
+  const handleSuccess = () => setSuccess(true);
+  const handleCloseSuccess = () => {
+    setSuccess(false);
+    clear();
+  };
+
   const handleFilterCliente = (filterValue) => {
     const newFilter = clientes.filter((value) =>
       value.Ruc.includes(filterValue)
     );
     setfilteredCliente(newFilter);
   };
+
+  useEffect(() => {
+    fetch(`${URL_DESARROLLO}/Cliente`)
+      .then((res) => res.json())
+      .then((data) => {
+        setClientes(data);
+      });
+    fetch(`${URL_DESARROLLO}/Vehiculo`)
+      .then((res) => res.json())
+      .then((data) => {
+        setVehiculos(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    setfilteredCliente(clientes);
+    setfilteredVehiculo(vehiculos);
+  }, [clientes, vehiculos]);
 
   const calcularTotales = (list) => {
     let subtotal = 0;
@@ -83,8 +117,12 @@ export default function FormVenta({ clientes, vehiculos }) {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        alert("Venta creada correctamente");
+        handleSuccess();
       });
+  };
+
+  const clear = () => {
+    window.location.reload();
   };
 
   const handleFilterVehiculo = (filterValue) => {
@@ -151,23 +189,14 @@ export default function FormVenta({ clientes, vehiculos }) {
         filteredCliente={filteredCliente}
         setCliente={setCliente}
       />
+      <Success open={success} handleClose={handleCloseSuccess} />
       <Container maxWidth="lg">
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="h4">Ingreso de Venta</Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="text"
-              startIcon={<AddBoxIcon />}
-              onClick={handleOpenCliente}
-              color="primary"
-              fullWidth
-            >
-              Agregar Cliente
-            </Button>
-          </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={0} md={4}></Grid>
+          <Grid item xs={12} md={4}>
             <Button
               variant="text"
               startIcon={<AddBoxIcon />}
@@ -178,7 +207,7 @@ export default function FormVenta({ clientes, vehiculos }) {
               Agregar Vehiculo
             </Button>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12} md={4}>
             <Button
               variant="text"
               startIcon={<CheckIcon />}
@@ -189,18 +218,48 @@ export default function FormVenta({ clientes, vehiculos }) {
               Confirmar
             </Button>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={4}>
+            <FormControl variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Ruc o cedula
+              </InputLabel>
+              <OutlinedInput
+                value={cliente.Ruc}
+                defaultValue={" "}
+                size="small"
+                inputProps={{
+                  readOnly: true,
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleOpenCliente}
+                      edge="end"
+                    >
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Ruc o cedula"
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
             <TextField
               id="outlined-basic"
-              label="Cliente"
+              label="Nombre"
               variant="outlined"
-              value={cliente.Ruc}
-              onClick={handleOpenCliente}
-              fullWidth
+              value={cliente.RazonSocial}
+              defaultValue={" "}
               size="small"
+              InputProps={{
+                readOnly: true,
+              }}
+              fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={4}>
             <TextField
               id="date"
               label="Fecha"
@@ -225,7 +284,7 @@ export default function FormVenta({ clientes, vehiculos }) {
               fullWidth
               size="small"
               value={observacion}
-              onChange={(e) => setObservacion(e.target.value)}
+              onChange={(e) => setObservacion(e.target.value.toUpperCase())}
             />
           </Grid>
           <Grid item xs={12} justifyContent={"center"} alignItems={"center"}>
@@ -234,7 +293,6 @@ export default function FormVenta({ clientes, vehiculos }) {
               eliminarVehiculo={eliminarVehiculo}
             />
           </Grid>
-          {/*Grid con columna para totales solo usando MUI */}
           <Grid item xs={12}>
             <Grid container spacing={2}>
               <Grid item xs={6}>
@@ -248,7 +306,9 @@ export default function FormVenta({ clientes, vehiculos }) {
                   })}
                   fullWidth
                   size="small"
-                  disabled
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -262,7 +322,9 @@ export default function FormVenta({ clientes, vehiculos }) {
                   })}
                   fullWidth
                   size="small"
-                  disabled
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -276,7 +338,9 @@ export default function FormVenta({ clientes, vehiculos }) {
                   })}
                   fullWidth
                   size="small"
-                  disabled
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -290,7 +354,9 @@ export default function FormVenta({ clientes, vehiculos }) {
                   })}
                   fullWidth
                   size="small"
-                  disabled
+                  InputProps={{
+                    readOnly: true,
+                  }}
                 />
               </Grid>
             </Grid>

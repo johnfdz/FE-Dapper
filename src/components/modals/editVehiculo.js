@@ -1,6 +1,10 @@
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import { Button, FormControl, InputLabel } from "@mui/material";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 export default function EditVehiculo({
   modal,
@@ -24,10 +28,7 @@ export default function EditVehiculo({
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <form onSubmit={modSubmit}>
               <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
-                  Nombre
-                </label>
-                <input
+                <TextField
                   value={vehiculo.Nombre}
                   onChange={(e) => {
                     setVehiculo({ ...vehiculo, Nombre: e.target.value });
@@ -36,13 +37,14 @@ export default function EditVehiculo({
                   className="form-control"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
+                  label="Nombre"
+                  fullWidth
+                  required
+                  size="small"
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
-                  Marca
-                </label>
-                <input
+                <TextField
                   value={vehiculo.Marca}
                   onChange={(e) => {
                     setVehiculo({ ...vehiculo, Marca: e.target.value });
@@ -51,43 +53,54 @@ export default function EditVehiculo({
                   className="form-control"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
+                  label="Marca"
+                  fullWidth
+                  required
+                  size="small"
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
-                  Precio
-                </label>
-                <input
+                <TextField
                   value={vehiculo.Precio}
                   onChange={(e) => {
                     setVehiculo({ ...vehiculo, Precio: e.target.value });
                   }}
-                  type="text"
+                  type="number"
                   className="form-control"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
+                  label="Precio"
+                  fullWidth
+                  required
+                  size="small"
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
-                  Estado
-                </label>
-                <select
-                  value={vehiculo.Estado}
-                  onChange={(e) => {
-                    setVehiculo({ ...vehiculo, Estado: e.target.value });
-                  }}
-                  className="form-select"
-                  aria-label="Default select example"
+                <FormControl
+                  fullWidth
+                  size="small"
+                  required
+                  className="form-control"
                 >
-                  <option selected>Seleccione</option>
-                  <option value={true}>Activo</option>
-                  <option value={false}>Inactivo</option>
-                </select>
+                  <InputLabel id="demo-simple-select-label">Estado</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={vehiculo.Estado}
+                    label="Estado"
+                    onChange={(e) =>
+                      setVehiculo({ ...vehiculo, Estado: e.target.value })
+                    }
+                    required
+                  >
+                    <MenuItem value={true}>Activo</MenuItem>
+                    <MenuItem value={false}>Inactivo</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
-              <button type="submit" className="btn btn-primary">
+              <Button type="submit" variant="contained" fullWidth>
                 Guardar
-              </button>
+              </Button>
             </form>
           </Typography>
         </Box>

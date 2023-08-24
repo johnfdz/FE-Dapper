@@ -11,10 +11,6 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Grid, TextField } from "@mui/material";
-import Alert from "@mui/material/Alert";
-import IconButton from "@mui/material/IconButton";
-import Collapse from "@mui/material/Collapse";
-import CloseIcon from "@mui/icons-material/Close";
 
 export default function TablaVehiculo({
   vehiculos,
@@ -25,7 +21,6 @@ export default function TablaVehiculo({
 }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [openAlert, setOpenAlert] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -38,10 +33,7 @@ export default function TablaVehiculo({
 
   const handleAddItem = (nuevoItem) => {
     itemSelected(nuevoItem);
-    setOpenAlert(true);
-    setTimeout(() => {
-      setOpenAlert(false);
-    }, 1000);
+    handleClose();
   };
 
   return (
@@ -57,28 +49,6 @@ export default function TablaVehiculo({
             Vehiculo
           </Typography>
           <Grid container spacing={2}>
-            <Grid item md={12}>
-              <Collapse in={openAlert}>
-                <Alert
-                  action={
-                    <IconButton
-                      aria-label="close"
-                      color="inherit"
-                      size="small"
-                      onClick={() => {
-                        setOpenAlert(false);
-                      }}
-                    >
-                      <CloseIcon fontSize="inherit" />
-                    </IconButton>
-                  }
-                  sx={{ mb: 2 }}
-                >
-                  Se ha agregado el vehiculo con exito!
-                </Alert>
-              </Collapse>
-            </Grid>
-
             <Grid item sm={12}>
               <TextField
                 onChange={(e) => handleFilterVehiculo(e.target.value)}
@@ -98,10 +68,18 @@ export default function TablaVehiculo({
                   >
                     <TableHead>
                       <TableRow>
-                        <TableCell>Nombre</TableCell>
-                        <TableCell align="right">Marca</TableCell>
-                        <TableCell align="right">Precio</TableCell>
-                        <TableCell align="right"></TableCell>
+                        <TableCell>
+                          <strong>Nombre</strong>
+                        </TableCell>
+                        <TableCell align="right">
+                          <strong>Marca</strong>
+                        </TableCell>
+                        <TableCell align="right">
+                          <strong>Precio</strong>
+                        </TableCell>
+                        <TableCell align="right">
+                          <strong>Estado</strong>
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>

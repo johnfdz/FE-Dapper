@@ -7,6 +7,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { useState } from "react";
+import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function TablaVenta({ listDetalle, eliminarVehiculo }) {
   const [page, setPage] = useState(0);
@@ -28,14 +30,30 @@ export default function TablaVenta({ listDetalle, eliminarVehiculo }) {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Linea</TableCell>
-                <TableCell>Vehiculo</TableCell>
-                <TableCell align="right">Precio</TableCell>
-                <TableCell align="right">Cantidad</TableCell>
-                <TableCell align="right">Subtotal</TableCell>
-                <TableCell align="right">Iva</TableCell>
-                <TableCell align="right">Descuento</TableCell>
-                <TableCell align="right">Neto</TableCell>
+                <TableCell>
+                  <strong>Linea</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Vehiculo</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Precio</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Cantidad</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Subtotal</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Iva</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Descuento</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Neto</strong>
+                </TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -85,12 +103,11 @@ export default function TablaVenta({ listDetalle, eliminarVehiculo }) {
                       })}
                     </TableCell>
                     <TableCell align="right">
-                      <button
+                      <Button
                         onClick={eliminarVehiculo(index)}
-                        className="btn btn-danger"
-                      >
-                        <i className="fas fa-trash">Eliminar</i>
-                      </button>
+                        color="error"
+                        startIcon={<DeleteIcon />}
+                      ></Button>
                     </TableCell>
                   </TableRow>
                 ))}

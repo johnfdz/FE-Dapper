@@ -106,13 +106,27 @@ export default function TablaCliente({ clientes }) {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Ruc</TableCell>
-                <TableCell align="right">Razon Social</TableCell>
-                <TableCell align="right">Telelfono</TableCell>
-                <TableCell align="right">Celular</TableCell>
-                <TableCell align="right">Correo</TableCell>
-                <TableCell align="right">Direccion</TableCell>
-                <TableCell align="right">Estado</TableCell>
+                <TableCell>
+                  <strong>Ruc</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Razon Social</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Telefono</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Celular</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Correo</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Direccion</strong>
+                </TableCell>
+                <TableCell align="right">
+                  <strong>Estado</strong>
+                </TableCell>
                 <TableCell align="right"></TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
