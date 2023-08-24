@@ -232,7 +232,6 @@ export default function FormVenta() {
               </InputLabel>
               <OutlinedInput
                 value={cliente.Ruc ? cliente.Ruc : ""}
-                defaultValue={" "}
                 size="small"
                 inputProps={{
                   readOnly: true,
@@ -258,7 +257,6 @@ export default function FormVenta() {
               label="Nombre"
               variant="outlined"
               value={cliente.RazonSocial ? cliente.RazonSocial : ""}
-              defaultValue={" "}
               size="small"
               InputProps={{
                 readOnly: true,
