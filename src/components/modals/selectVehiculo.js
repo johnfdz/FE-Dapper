@@ -93,7 +93,6 @@ export default function TablaVehiculo({
                           <TableRow
                             onDoubleClick={() => {
                               handleAddItem(row);
-                              //   setOpenAlert(true);
                             }}
                             hover
                             key={row.Codigo}
@@ -124,7 +123,7 @@ export default function TablaVehiculo({
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25]}
                   component="div"
-                  count={vehiculos.length}
+                  count={vehiculos.filter((row) => row.Estado === true).length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

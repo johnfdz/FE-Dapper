@@ -8,6 +8,7 @@ export default function Navbar() {
     { title: "Cliente", path: "/" },
     { title: "Vehiculo", path: "/mostrarVehiculo" },
     { title: "Venta", path: "/venta" },
+    { title: "Reporte Ventas", path: "/reporteVentas" },
   ];
 
   const [open, setOpen] = useState(false);

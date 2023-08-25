@@ -8,6 +8,7 @@ import CrearVehiculo from "./pages/crearVehiculo";
 import Navbar from "./components/base/navbar/navbar";
 import Venta from "./pages/venta";
 import { Container } from "@mui/material";
+import ReportesVentas from "./pages/reportesVentas";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/mostrarVehiculo" element={<MostrarVehiculo />} />
           <Route path="/crearVehiculo" element={<CrearVehiculo />} />
           <Route path="/venta" element={<Venta />} />
+          <Route path="reporteVentas" element={<ReportesVentas />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </Container>

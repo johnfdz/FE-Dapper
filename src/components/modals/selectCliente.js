@@ -131,7 +131,9 @@ export default function SeleccionarCliente({
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25]}
                   component="div"
-                  count={filteredCliente.length}
+                  count={
+                    filteredCliente.filter((row) => row.Estado === true).length
+                  }
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

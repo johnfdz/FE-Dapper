@@ -225,7 +225,7 @@ export default function FormVenta() {
               Confirmar
             </Button>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
                 Ruc o cedula
@@ -251,7 +251,7 @@ export default function FormVenta() {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={5}>
             <TextField
               id="outlined-basic"
               label="Nombre"
